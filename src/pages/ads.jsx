@@ -5,7 +5,8 @@ import { useLocation } from "react-router";
 
 const Ads = () => {
     const location = useLocation();
-    const { category = '', subcategory = '' } = location.state || {};
+    const { category , subcategory } = location.state || {};
+    console.log("category",category,"sub",subcategory)
     const user = location.state?.user;
     const [adsList, setAdsList] = useState([]);
     const [userData, setUserData] = useState({
@@ -17,8 +18,12 @@ const Ads = () => {
                setUserData(user); // Set user details in state
    
            }
+           
    
        }, [user]);
+       useEffect(()=>{
+        console.log(userData)
+       },[userData])
 
     const [formData, setFormData] = useState({
         brand: '',
@@ -33,7 +38,7 @@ const Ads = () => {
         image: [],
         category: category,
         subcategory: subcategory,
-        UserId: userData.UserId,
+        UserId: userData.userIds,
     });
     const handleImage = (e) => {
         const files = Array.from(e.target.files);
@@ -57,7 +62,7 @@ const Ads = () => {
         const adData = new FormData();
         Object.entries(formData).forEach(([key, value]) => {
             if (key === "image") {
-                value.forEach((img) => adData.append("image", img)); // match the backend field name
+                value.forEach((img) => adData.append("images", img)); // match the backend field name
             }
             
             else {
@@ -67,7 +72,7 @@ const Ads = () => {
 
         try {
             const headers = { "Content-Type": "multipart/form-data" };
-            const res = await addAds(userData?.userId,adData, headers);
+            const res = await addAds(userData?.UserIds,adData, headers);
             alert("Ad posted successfully!");
         } catch (err) {
             console.error("Error posting ad:", err);

@@ -6,11 +6,12 @@ import { updateIsLoggedIn } from "../reduxToolKit/slice"
 import { useNavigate } from "react-router"
 
 const Login = () => {
-    const [userDetails, setUserDetails] = useState({ userId:"",firstName: "", password: "", email: "" })
+    // const [userDetails, setUserDetails] = useState({ userId:"",firstName: "", password: "", email: "" })
+    const [userDetails, setUserDetails] = useState({ password: "", email: "" })
     const dispatch = useDispatch()
     const navigate=useNavigate()
 
-    const successnotify = () => toast(`successfully login !  ${userDetails.firstName}`, {
+    const successnotify = () => toast(`successfully login !  `, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,

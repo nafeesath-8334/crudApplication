@@ -10,7 +10,7 @@ const Category = () => {
     const handleSubmit = () => {
        
         navigate('/ads', {
-            // state: { category , subcategory  }
+            state: { category , subcategory  }
         });
         
     };

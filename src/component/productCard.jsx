@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
+import Ads from "../pages/ads";
 
-const ProductCard = () => {
+const ProductCard = ({Ads}) => {
     const navigate = useNavigate();
 
     return (
