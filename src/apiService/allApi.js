@@ -18,8 +18,11 @@ export const editUserDetails = async (userId, userData,headers) => {
     console.log(userId)
     return await commonApi("PUT", `${baseUrl}editUserDetails/${userId}`, userData,headers);
 }
-export const addAds=async(UserId,data,headers)=>{
+export const addAds=async(data,headers)=>{
     console.log(data)
-    console.log(UserId)
-    return await commonApi("POST",`${baseUrl}addAds/${UserId}`,data,headers)
+    // console.log(UserId)
+    return await commonApi("POST",`${baseUrl}addAds/`,data,headers)
+}
+export const getAllAds = async (body) => {
+    return await commonApi("GET", `${baseUrl}getAllAds`,body)
 }

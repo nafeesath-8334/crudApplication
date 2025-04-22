@@ -14,6 +14,7 @@ import Category from './pages/category'
 import Ads from './pages/ads'
 import EditProfile from './pages/editProfile'
 import ProductCard from './component/productCard'
+import AllAd from './pages/allAdd'
 
 
 
@@ -27,16 +28,17 @@ function App() {
       <BrowserRouter>
         <Provider store={store}>
           <Routes>
-
-            <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+             <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+             <Route path="/Home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/productDetails" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
             <Route path="/register" element={<Register />} />
-            <Route path="/productCard" element= {<ProductCard /> }/>
+            <Route path="/productCard" element= { <ProductCard />}/>
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/category" element={<ProtectedRoute><Category /></ProtectedRoute>} />
             <Route path="/ads" element={<ProtectedRoute><Ads /></ProtectedRoute>} />
             <Route path="/editProfile" element={<ProtectedRoute><EditProfile/></ProtectedRoute>} />
+            <Route path="/allAd" element={<AllAd />} />
           </Routes>
         </Provider>
 

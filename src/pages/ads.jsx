@@ -1,26 +1,31 @@
 import { useEffect, useState } from "react";
 import { addAds } from "../apiService/allApi";
-import ProductCard from "../component/productCard";
-import { useLocation } from "react-router";
+
+import { Navigate, useLocation, useNavigate } from "react-router";
 
 const Ads = () => {
     const location = useLocation();
     const { category , subcategory } = location.state || {};
     console.log("category",category,"sub",subcategory)
-    const user = location.state?.user;
+    // const user = location.state?.user;
     const [adsList, setAdsList] = useState([]);
     const [userData, setUserData] = useState({
-        UserId: "",
+        UserId:'',
     })
-    // const [image, setImage] = useState()
+     const navigate= useNavigate()
+    
+    const [image, setImage] = useState()
     useEffect(() => {
-           if (user) {
-               setUserData(user); // Set user details in state
+        const userData = JSON.parse(localStorage.getItem("userCredentials"));
+        if (userData && userData.UserId) {
+          setFormData((prev) => ({
+            ...prev,
+            userId: userData.UserId,
+          }));
+        }
+      }, []);
    
-           }
-           
-   
-       }, [user]);
+  
        useEffect(()=>{
         console.log(userData)
        },[userData])
@@ -38,7 +43,7 @@ const Ads = () => {
         image: [],
         category: category,
         subcategory: subcategory,
-        UserId: userData.userIds,
+        userId:  userData.UserId,
     });
     const handleImage = (e) => {
         const files = Array.from(e.target.files);
@@ -72,11 +77,18 @@ const Ads = () => {
 
         try {
             const headers = { "Content-Type": "multipart/form-data" };
-            const res = await addAds(userData?.UserIds,adData, headers);
-            alert("Ad posted successfully!");
+            // const res = await addAds(userData?.UserIds,adData, headers);
+            const res = await addAds(adData, headers);
+            if(res.status===201){
+                alert("Ad posted successfully!");
+                navigate('/Home')
+            }else{
+                alert("failed to add") 
+            }
+           
         } catch (err) {
             console.error("Error posting ad:", err);
-            alert("Failed to post ad.");
+            alert("Failed !!!.");
         }
     };
 
@@ -215,8 +227,8 @@ const Ads = () => {
                 </div>
             </div>
             <div className="grid gap-4">
-                {adsList.map((ad, index) => (
-                    <ProductCard key={index} ads={ad} />
+                {adsList.map((add, index) => (
+                    <ProductCard key={index} adds={add} />
                 ))}
             </div>
         </form>
