@@ -2,32 +2,25 @@
 import { useEffect, useState } from "react";
 import Footer from "../component/Footer"
 import Navbar from "../component/Navbar"
-import ProductCard from "../component/productCard"
-import { getAllAds } from "../apiService/allApi";
+
+import AllAd from "./allAdd";
 
 const Home=()=>{
-     const [adds, setAdds] = useState([]);
+     const [searchResult, setSearchResult] = useState([]);
     
       useEffect(() => {
-        const fetchAds = async () => {
-          try {
-            const res = await getAllAds();
-            setAdds(res.data);
-          } catch (err) {
-            console.error('Error fetching ads:', err);
-          }
-        };
-        fetchAds();
-      }, []);
+        console.log(searchResult)
+         
+       }, [searchResult]);
    
     return(
         <>
-        <Navbar />
-       
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
-      {adds.map((adds, index) => (
-        <ProductCard key={index} adds={adds} />
-      ))}
+        <Navbar setSearchResult={setSearchResult}/>
+       <div className="flex justify-center items-center p-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+      
+      <AllAd searchResult={searchResult}/>
+      </div>
     </div>
                
           

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { getAllAds } from '../apiService/allApi';
 import ProductCard from '../component/productCard';
 
-const AllAd = () => {
+const AllAd = ({ searchResult }) => {
   const [adds, setAdds] = useState([]);
 
   useEffect(() => {
@@ -15,15 +15,25 @@ const AllAd = () => {
         console.error('Error fetching ads:', err);
       }
     };
-    fetchAds();
-  }, []);
+    if (searchResult?.length > 0) {
+      setAdds(searchResult)
+    } else {
+      fetchAds()
+    }
+    // fetchAds();
+    console.log(searchResult)
+  }, [searchResult]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
-      {adds.map((adds, index) => (
-        <ProductCard key={index} adds={adds} />
-      ))}
-    </div>
+    <div className="flex justify-center items-center p-12"> <div className="p-6">
+      <div className="grid grid-cols-1 gap-6">
+        {adds.map((ad, index) => (
+          <ProductCard key={index} adds={ad} />
+        ))}
+      </div>
+    </div></div>
+
+
   );
 };
 

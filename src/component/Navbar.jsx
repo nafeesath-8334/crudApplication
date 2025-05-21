@@ -1,26 +1,86 @@
-import { useState } from "react";
-
-const Navbar = () => {
+import { useState, useEffect } from "react";
+import { search, searchLocation } from "../apiService/allApi"
+import { Link, useNavigate } from "react-router";
+const Navbar = ({ setSearchResult }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [queryItem, setQueryItem] = useState('');
+  const [queryLocation, setQueryLocation] = useState('');
 
-  const Dropdown = () => {
+  const [results, setResults] = useState([]);
+  const [isLoggIn, setIsLoggIn] = useState()
+  const navigate = useNavigate()
+
+
+  // Toggle dropdown
+  const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const closeDropdown = (e) => {
-    if (!e.target.closest(".dropdown")) {
-      setIsOpen(false);
+
+  const handleSearchChange = async (e) => {
+    const searchQuery = e.target.value;
+    setQueryItem(searchQuery);
+
+    if (searchQuery.trim() === '') {
+      setResults([]);
+      return;
+    }
+
+    try {
+      const data = await search(searchQuery);
+      console.log(data.data.items);
+      setSearchResult(data.data.items);
+    } catch (error) {
+      console.error('Error fetching item search results:', error);
+      setResults([]);
     }
   };
 
-  // Attach event listener to detect clicks outside
-  document.addEventListener("click", closeDropdown);
-    
+  const handleSearchChangeLoc = async (e) => {
+    const searchQueryL = e.target.value;
+    setQueryLocation(searchQueryL);
+
+    if (searchQueryL.trim() === '') {
+      setResults([]);
+      return;
+    }
+
+    try {
+      const data = await searchLocation(searchQueryL);
+      console.log(data.data.items);
+      setSearchResult(data.data.items);
+    } catch (error) {
+      console.error('Error fetching location search results:', error);
+      setResults([]);
+    }
+  };
+
+  useEffect(() => {
+    const userToken = localStorage.getItem('token');
+    setIsLoggIn(!!userToken);
+  }, []);
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const closeDropdown = (e) => {
+      if (!e.target.closest(".dropdown")) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("click", closeDropdown);
+    return () => document.removeEventListener("click", closeDropdown);
+  }, []);
+  const logout = () => {
+    localStorage.removeItem("userCredentials")
+    navigate("/login")
+    setIsLoggIn(false)
+  }
 
   return (
     <nav className="sticky top-0 bg-gray-100 text-black p-1 shadow-md z-50">
       <div className="container mx-auto flex justify-between items-center">
-        <img src="download.jpg" className="w-20 h-20" alt="Logo" />
+        <img src="download.jpg" className="w-16 h-16" alt="Logo" onClick={()=>navigate("/Home")} />
 
         <div className="flex items-center border border-2 rounded-lg">
           <svg
@@ -42,8 +102,11 @@ const Navbar = () => {
             type="text"
             placeholder="Search for locations..."
             className="px-4 py-2"
+            value={queryLocation}
+            onChange={handleSearchChangeLoc}
+
           />
-          <button className="p-2">
+          <button className="p-2" >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -61,14 +124,16 @@ const Navbar = () => {
           </button>
         </div>
 
-        <div className="flex items-center border rounded-lg">
+        <div className="flex items-center border rounded-lg relative">
           <input
             type="text"
             placeholder="Search for items"
             className="px-4 py-2 w-full"
+            value={queryItem}
+            onChange={handleSearchChange}
           />
-          <div>
-            <button >
+          <div className="relative">
+            <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -84,26 +149,14 @@ const Navbar = () => {
                 />
               </svg>
             </button>
+            
           </div>
         </div>
 
-        <div className="relative dropdown">
-          <button  onClick={Dropdown} className="flex items-center">
-            <span className="mr-1">ENGLISH</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-            </svg>
-          </button>
-         {isOpen && (
-            <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
-              <a href="/" className="block px-4 py-2 text-gray-800 hover:bg-blue-100">English</a>
-              <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-blue-100">Hindi</a>
-            </div>
-          )}
-        </div>
+        
 
         <div>
-          <button>
+          <button onClick={()=>navigate("/favorites")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -122,16 +175,18 @@ const Navbar = () => {
         </div>
 
         <div className="underline font-semibold">
-        
-        <a href="/profile">Profile</a>
-      </div>
+          <a href="/profile">Profile</a>
+        </div>
         <div className="underline font-semibold">
-        
-          <a href="/login">Login</a>
+          {isLoggIn ? (
+            <button onClick={logout}>Logout</button>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
         </div>
 
         <div className="flex items-center border rounded font-semibold">
-          <button className="flex items-center p-2">
+          <button className="flex items-center p-2" onClick={()=>navigate("/category")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -151,7 +206,7 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
