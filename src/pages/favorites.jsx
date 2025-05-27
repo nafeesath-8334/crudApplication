@@ -14,7 +14,7 @@
       }
 
     const parsedCredentials = JSON.parse(userCredentials);
-      const userId = parsedCredentials.UserId;
+      const userId = parsedCredentials.userId;
 
        try {
          const { favorites: favoriteAdIds } = await getUserFavorites(userId);

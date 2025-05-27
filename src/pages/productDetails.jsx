@@ -117,35 +117,35 @@ const ProductDetails = () => {
             console.log("Current favoritStatus:", isFavorited);
             console.log("UserId:", userId);
             console.log("AdId:", adds.adId);
-           
 
-             if (isFavorited) {
-            //     // Remove from favorites
-               await removeFromFavorites(userId, adds.adId);
 
-            //     // Update local storage favorites
+            if (isFavorited) {
+                //     // Remove from favorites
+                await removeFromFavorites(userId, adds.adId);
+
+                //     // Update local storage favorites
                 const updatedCredentials = {
-                     ...parsedCredentials,
-                     favorites: (parsedCredentials.favorites || []).filter(id => id !== adds.adId)
-                 };
-                 localStorage.setItem("userCredentials", JSON.stringify(updatedCredentials));
+                    ...parsedCredentials,
+                    favorites: (parsedCredentials.favorites || []).filter(id => id !== adds.adId)
+                };
+                localStorage.setItem("userCredentials", JSON.stringify(updatedCredentials));
 
-            setIsFavorited(false);
-             } else {
-             //Add to favorites
-                     await addToFavorites(userId, adds.adId);
+                setIsFavorited(false);
+            } else {
+                //Add to favorites
+                await addToFavorites(userId, adds.adId);
 
-                     // Update local storage favorites
-                     const updatedCredentials = {
-                         ...parsedCredentials,
-                         favorites: [...(parsedCredentials.favorites || []), adds.adId]
-                    };
-                     localStorage.setItem("userCredentials", JSON.stringify(updatedCredentials));
+                // Update local storage favorites
+                const updatedCredentials = {
+                    ...parsedCredentials,
+                    favorites: [...(parsedCredentials.favorites || []), adds.adId]
+                };
+                localStorage.setItem("userCredentials", JSON.stringify(updatedCredentials));
 
-                     setIsFavorited(true);
-             }
+                setIsFavorited(true);
+            }
 
-                 setLoading(false);
+            setLoading(false);
         } catch (err) {
             console.error("Error updating favorites:", err);
             alert(err.response?.data?.message || "Failed to update favorites");
@@ -214,7 +214,8 @@ const ProductDetails = () => {
                                     <button
                                         className="absolute top-4 right-4 bg-white bg-opacity-90 p-2 rounded-full shadow-md hover:bg-opacity-100 transition-all"
                                         onClick={handleFavorite}
-                                        disabled={isFavorited}
+                                        disabled={loading}
+                                        aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +326,7 @@ const ProductDetails = () => {
                                             className={`${isFavorited ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-600"
                                                 } text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center flex-1`}
                                             onClick={handleFavorite}
-                                            disabled={isFavorited}
+                                            disabled={isFavorited || loading}
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill={isFavorited ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />

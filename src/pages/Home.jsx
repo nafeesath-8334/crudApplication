@@ -16,12 +16,12 @@ const Home=()=>{
     return(
         <>
         <Navbar setSearchResult={setSearchResult}/>
-       <div className="flex justify-center items-center p-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
-      
+       {/* <div className="flex justify-center items-center p-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6"> */}
+       <div className="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-16">
       <AllAd searchResult={searchResult}/>
       </div>
-    </div>
+    {/* </div> */}
                
           
         <Footer />

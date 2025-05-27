@@ -63,8 +63,8 @@ export const deleteAd = async (adId, headers) => {
  }
 export const addToFavorites = async (userId, adId) => {
       console.log("Sending favorite request with:", { userId, adId });
-    return await commonApi("POST", `${baseUrl}addToFavorites/${userId}`,`${adId}`, "")
+    return await commonApi("PUT", `${baseUrl}addToFavorites/${adId}`,data, "")
 }
 export const removeFromFavorites = async (userId, adId) => {
-    return await commonApi("DELETE", `${baseUrl}removeFromFavorites/${userId},${adId}`, "")
+    return await commonApi("DELETE", `${baseUrl}removeFromFavorites/${userId}`, "")
 }

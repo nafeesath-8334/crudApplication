@@ -25,14 +25,22 @@ const AllAd = ({ searchResult }) => {
   }, [searchResult]);
 
   return (
-    <div className="flex justify-center items-center p-12"> <div className="p-6">
-      <div className="grid grid-cols-1 gap-6">
-        {adds.map((ad, index) => (
-          <ProductCard key={index} adds={ad} />
-        ))}
-      </div>
-    </div></div>
-
+    // <div className="flex justify-center items-center p-12"> <div className="p-6">
+    //   <div className="grid grid-cols-1 gap-6">
+    //     {adds.map((ad, index) => (
+    //       <ProductCard key={index} adds={ad} />
+    //     ))}
+    //   </div>
+    // </div></div>
+<> {adds.length === 0 ? (
+        <div className="text-center text-gray-500 mt-12">No ads found.</div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {adds.map((ad, index) => (
+            <ProductCard key={index} adds={ad} />
+          ))}
+        </div>
+      )}</>
 
   );
 };
