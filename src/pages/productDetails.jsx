@@ -4,6 +4,9 @@ import { useLocation, useNavigate, useParams } from "react-router";
 import Carousel from 'react-bootstrap/Carousel';
 import { addToFavorites, deleteAd, getUserDetails, removeFromFavorites } from "../apiService/allApi";
 
+import Footer from "../component/Footer";
+import Navbar from "../component/Navbar";
+
 const ProductDetails = () => {
     const [showOverlay, setShowOverlay] = useState(true);
     const [isFavorited, setIsFavorited] = useState(false);
@@ -37,6 +40,8 @@ const ProductDetails = () => {
         );
     }
 
+
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
@@ -67,7 +72,7 @@ const ProductDetails = () => {
 
         fetchUserDetails();
         checkFavoriteStatus();
-    }, [adds]);
+    }, [adds.adId]);
 
     const handleDelete = async () => {
         if (!confirmDelete) {
@@ -96,7 +101,8 @@ const ProductDetails = () => {
         }
     };
 
-    const handleFavorite = async () => {
+    const handleFavorite = async (e) => {
+        e.preventDefault()
         try {
             const userCredentials = localStorage.getItem("userCredentials");
 
@@ -120,20 +126,30 @@ const ProductDetails = () => {
 
 
             if (isFavorited) {
+                const body = {
+                    "userId": userId,
+                    "adId": adds.adId
+                }
                 //     // Remove from favorites
-                await removeFromFavorites(userId, adds.adId);
+                await removeFromFavorites(body);
 
-                //     // Update local storage favorites
+                // Update local storage favorites
                 const updatedCredentials = {
                     ...parsedCredentials,
                     favorites: (parsedCredentials.favorites || []).filter(id => id !== adds.adId)
                 };
                 localStorage.setItem("userCredentials", JSON.stringify(updatedCredentials));
 
-                setIsFavorited(false);
+                setIsFavorited(!isFavorited);
+
             } else {
+                // const body={userId,"adId":adds.adId}
+                const body = {
+                    "userId": userId,
+                    "adId": adds.adId
+                }
                 //Add to favorites
-                await addToFavorites(userId, adds.adId);
+                await addToFavorites(body);
 
                 // Update local storage favorites
                 const updatedCredentials = {
@@ -142,10 +158,11 @@ const ProductDetails = () => {
                 };
                 localStorage.setItem("userCredentials", JSON.stringify(updatedCredentials));
 
-                setIsFavorited(true);
+                setIsFavorited(isFavorited);
+
             }
 
-            setLoading(false);
+            setLoading(true);
         } catch (err) {
             console.error("Error updating favorites:", err);
             alert(err.response?.data?.message || "Failed to update favorites");
@@ -154,25 +171,17 @@ const ProductDetails = () => {
     };
 
 
-    // Format date
-    // const formatDate = (dateString) => {
-    //     if (!dateString) return "Unknown";
-    //     const date = new Date(dateString);
-    //     return date.toLocaleDateString("en-US", {
-    //         year: "numeric",
-    //         month: "long",
-    //         day: "numeric"
-    //     });
-    // };
+
 
     return (
-        <div className="bg-gray-50 min-h-screen py-8">
+        <><Navbar/>
+         <div className="bg-gray-50 min-h-screen py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Breadcrumb */}
                 <nav className="flex mb-6" aria-label="Breadcrumb">
                     <ol className="flex items-center space-x-2">
                         <li>
-                            <button onClick={() => navigate("/")} className="text-gray-500 hover:text-gray-700">Home</button>
+                            <button onClick={() => navigate("/Home")} className="text-gray-500 hover:text-gray-700">Home</button>
                         </li>
                         <li className="flex items-center">
                             <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -209,9 +218,21 @@ const ProductDetails = () => {
                                         <div className="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 text-sm font-bold rounded-md shadow-lg">
                                             Featured
                                         </div>
+                                        
                                     )}
-
-                                    <button
+                                     <button
+                                            className={`${isFavorited ? " absolute top-4 right-4 bg-gray-400" : "bg-yellow-500 hover:bg-yellow-600"
+                                                } text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center flex-1`}
+                                            // onClick={handleFavorite}
+                                            disabled={loading}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill={isFavorited ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                            {isFavorited ? "Favorited" : "Add to Favorites"}
+                                        </button>
+                                    
+                                    {/* <button
                                         className="absolute top-4 right-4 bg-white bg-opacity-90 p-2 rounded-full shadow-md hover:bg-opacity-100 transition-all"
                                         onClick={handleFavorite}
                                         disabled={loading}
@@ -224,6 +245,7 @@ const ProductDetails = () => {
                                             strokeWidth={1.5}
                                             stroke="currentColor"
                                             className="w-6 h-6 text-red-600"
+                                           
                                         >
                                             <path
                                                 strokeLinecap="round"
@@ -231,8 +253,10 @@ const ProductDetails = () => {
                                                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                                             />
                                         </svg>
-                                    </button>
+                                    </button> */}
                                 </div>
+                               
+
                             </div>
 
                             {/* Right column - Product details */}
@@ -322,17 +346,15 @@ const ProductDetails = () => {
 
                                 <div className="mt-8">
                                     <div className="flex space-x-4">
-                                        <button
-                                            className={`${isFavorited ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-600"
-                                                } text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center flex-1`}
-                                            onClick={handleFavorite}
-                                            disabled={isFavorited || loading}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill={isFavorited ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                            </svg>
-                                            {isFavorited ? "Favorited" : "Add to Favorites"}
-                                        </button>
+                                        {/* <button
+                                        className="absolute top-4 right-4 bg-white bg-opacity-90 p-2 rounded-full shadow-md hover:bg-opacity-100 transition-all"
+                                        onClick={handleFavorite}
+                                        disabled={loading}
+                                        // aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+                                    >{isFavorited ? "Remove from favorites" : "Add to favorites"}</button> */}
+                                        <button className="bg-yellow-500 hover:bg-yellow-600 
+                                                 text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center " onClick={handleFavorite}>{isFavorited ? "Remove from favorites" : "Add to favorites"}</button>
+                                        
                                         <button
                                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center flex-1"
                                             onClick={() => navigate(`/editAd/${adds.adId}`)}
@@ -411,7 +433,10 @@ const ProductDetails = () => {
                 )}
             </div>
         </div>
-    );
+   
+        <Footer/>
+        </>
+        );
 };
 
 export default ProductDetails;

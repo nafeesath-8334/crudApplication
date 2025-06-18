@@ -1,8 +1,8 @@
-  import { useState, useEffect } from "react";
- import {  getAllAds, getUserFavorites } from "../apiService/allApi";
- import ProductCard from "../component/productCard";
+import { useState, useEffect } from "react";
+import { getAllAds, getUserFavorites } from "../apiService/allApi";
+import ProductCard from "../component/productCard";
 
- const Favorites = ({userId}) => {
+const Favorites = () => {
   const [favoriteProducts, setFavoriteProducts] = useState([]);
 
   useEffect(() => {
@@ -13,31 +13,40 @@
         return;
       }
 
-    const parsedCredentials = JSON.parse(userCredentials);
-      const userId = parsedCredentials.userId;
+      const parsedCredentials = JSON.parse(userCredentials);
+      const userId = parsedCredentials.UserId;
+      console.log(userId);
 
-       try {
-         const { favorites: favoriteAdIds } = await getUserFavorites(userId);
-         const allProducts = await getAllAds();
-         const filtered = allProducts.filter(p => favoriteAdIds.includes(p.adId));
-         setFavoriteProducts(filtered);       } catch (error) {
-         console.error("Error fetching favorites:", error);       }
+      try {
+        const result= await getUserFavorites(userId);
+        // const { ads } = await getAllAds(); 
+       
+
+
+        // const filtered = ads.filter(ad => favorites.includes(ad.adId));
+         console.log(result);
+
+
+         setFavoriteProducts(result.data.favorites);
+
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+      }
     };
 
     fetchFavorites();
-  }, [userId]);
+  }, []);
 
-   return (
-     <div>
-       <h1>Your Favorite Items</h1>
+  return (
+    <div>
+      <h1>Your Favorite Items</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {favoriteProducts.map(product => (
-          <ProductCard key={product.adId} product={product} />
+        {favoriteProducts?.map(product => (
+          <ProductCard key={product.adId} adds={product} />
         ))}
       </div>
     </div>
-   );
+  );
 };
 
- export default Favorites;
-
+export default Favorites;

@@ -41,9 +41,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path='/forgotpassword' element={<ForgotPassword />} ></Route>
             <Route path='/resetPassword' element={<ResetPassword />} ></Route>
-            <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
             <Route path="/Home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            {/* <Route path="/" element={<ProtectedRoute><Login/></ProtectedRoute>} /> */}
+            <Route path="/" element={<ProtectedRoute><Login/></ProtectedRoute>} />
 
             <Route path="/productDetails/:adId" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
 

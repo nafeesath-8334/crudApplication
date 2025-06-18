@@ -1,31 +1,9 @@
-// import { useNavigate } from "react-router";
 
-// const ProductCard = ({ adds }) => {
-//     console.log(adds)
-//     // if (!adds) return null; // or a placeholder, or fallback UI
-// const navigate=useNavigate()
-//     return (
-//         <div className="border p-4 rounded-lg shadow" onClick={()=>{navigate("/productDetails",{state:{adds}})}}>
-//             {adds?.image && adds?.image?.length > 0 && (
-//                 <img
-//                     src={`http://localhost:3000${adds?.image[0]}`}
-//                     alt={adds?.title}
-//                     className="h-40 w-full object-cover rounded mb-2"
-//                 />
-//             )}
-//             <h2 className="text-xl font-bold">{adds?.title}</h2>
-            
-//             <p className="text-green-600 font-semibold">₹{adds?.price}</p>
-//             <p className="text-green-600 font-semibold">{adds?.subcategory}</p>
-//         </div>
-//     );
-// };
-// export default ProductCard
 import { useNavigate } from "react-router";
 import { useState } from "react";
 
 const ProductCard = ({ adds }) => {
-  const [isHovered, setIsHovered] = useState(false);
+   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
   if (!adds) return null;
@@ -45,11 +23,11 @@ const ProductCard = ({ adds }) => {
 
   return (
     <div 
-      className={`bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300 ${
-        isHovered ? "shadow-lg transform -translate-y-1" : ""
-      }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className= "bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300"
+      //    {`${ isHovered ? "shadow-lg transform -translate-y-1" : ""
+      // }`}
+      //  onMouseEnter={() => setIsHovered(true)}
+      //  onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
     >
       {/* Image container with fixed height */}
@@ -58,9 +36,9 @@ const ProductCard = ({ adds }) => {
           <img
             src={`http://localhost:3000${adds.image[0]}`}
             alt={adds.title || "Product"}
-            className={`w-full h-full object-cover transition-transform duration-500 ${
-              isHovered ? "scale-110" : "scale-100"
-            }`}
+            className= "w-full h-full object-cover transition-transform duration-500 "
+            
+           
           />
         ) : (
           <div className="h-full w-full bg-gray-200 flex items-center justify-center">
@@ -137,16 +115,16 @@ const ProductCard = ({ adds }) => {
         </div>
       </div>
       
-      {/* View Details button that appears on hover */}
+      {/* View Details button that appears on hover
       <div 
-        className={`absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 ${
-          isHovered ? "opacity-100" : "opacity-0"
-        }`}
+        className= "absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 "
+          
+      
       >
         <button className="bg-white text-blue-600 font-medium py-2 px-4 rounded-lg hover:bg-blue-50 transition-colors">
           View Details
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

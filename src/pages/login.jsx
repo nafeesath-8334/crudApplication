@@ -52,7 +52,7 @@ const Login = () => {
                 successnotify()
               
                 const userCredentials = {
-                    UserId: result.data.userDetails.userId,
+                   UserId: result.data.userDetails.userId,
                     Name: result.data.userDetails.FirstName,
                     email: result.data.userDetails.email,
                     password: result.data.userDetails.password,
